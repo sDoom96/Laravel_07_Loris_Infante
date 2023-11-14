@@ -33,3 +33,18 @@ Route::post('/comics/store',[ComicController::class,'store'])->name('store.comic
 //?rotta delle card
 
 Route::get('/comics',[ComicController::class,'index'])->name('comics.index');
+
+//?rotta del dettaglio
+
+Route::get('/comics/show/{data}',[ComicController::class,'show'])->name('comics.show');
+
+//?rotta per l'update
+
+Route::get('/comics/edit/{data}',[ComicController::class,'edit'])->name('comics.edit');
+
+Route::put('/comics/update/{data}',[ComicController::class,'update'])->name('comics.update');
+
+
+//? rotta pr il delete 
+
+Route::delete('/comics/delete/{data}',[ComicController::class,'destroy'])->name('comics.delete');

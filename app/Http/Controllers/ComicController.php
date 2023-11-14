@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ComicController extends Controller
 {
@@ -44,32 +45,49 @@ class ComicController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Comic $comic)
+    public function show(Comic $data)
     {
-        //
+        return view('comics.show',compact('data'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Comic $comic)
+    public function edit(Comic $data)
     {
-        //
+        return view('comics.edit',compact('data'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Comic $comic)
+    public function update(Request $request, Comic $data)
     {
-        //
+        $file = $request->file('img');
+        
+        $data->update([
+            'title'=> $request->title,
+            'year'=> $request->year,
+            'description'=> $request->description,
+            /* 'img'=> $file ? $file->store('public/images') : 'public/images/default.png' */
+        ]);
+        
+        if ($file){
+            Storage::delete($data->img);
+            $data->img = $file->store('public/images');
+            $data->save();
+        }
+
+        return redirect()->route('comics.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comic $comic)
+    public function destroy(Comic $data)
     {
-        //
+        $data->delete();
+        Storage::delete($data->img);
+        return redirect()->route('comics.index');
     }
 }
